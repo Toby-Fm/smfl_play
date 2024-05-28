@@ -1,6 +1,4 @@
-#include "./include/main.hpp"
 #include "./include/window.hpp"
-#include "./include/draw.hpp"
 
 int main() {
     // Erstelle ein Fenster

@@ -1,5 +1,4 @@
 #include "./include/window.hpp"
-#include "./include/draw.hpp"
 
 // Constructor
 Window::Window() {
@@ -12,7 +11,6 @@ Window::Window() {
         exit(1);
     }
 
-    /*
     // Text schreiben
     text.setString("Deine Mutter"); // Setze den Text
     text.setCharacterSize(60); // Setze die Schriftgröße

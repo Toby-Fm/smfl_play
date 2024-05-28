@@ -5,8 +5,8 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
-#define WINDOW_HEIGHT 1920
-#define WINDOW_WIDTH 1080
+#define WINDOW_HEIGHT 1400
+#define WINDOW_WIDTH 800
 
 class Window {
 public:
