@@ -4,6 +4,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include <thread>
 
 #define WINDOW_HEIGHT 1400
 #define WINDOW_WIDTH 800
@@ -50,4 +51,6 @@ private:
     bool movingLeftCricle = false, movingRightCricle = false, movingUpCricle = false, movingDownCricle = false;
     bool movingLeftRec = false, movingRightRec = false, movingUpRec = false, movingDownRec = false;
     //bool movingLeft, movingRight, movingUp, movingDown;
+
+    std::thread window2Thread;
 };

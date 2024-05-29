@@ -8,6 +8,32 @@ Window::Window() {
     draw.drawRectangle();
 }
 
+// Funktion, die das zweite Fenster öffnet
+void Window2() {
+    sf::RenderWindow window(sf::VideoMode(400, 400), "Window 2");
+
+    while (window.isOpen()) {
+        sf::Event event;
+        while (window.pollEvent(event)) {
+            if (event.type == sf::Event::Closed) {
+                window.close();
+            }
+        }
+
+        window.clear(sf::Color::Black);
+
+        // Fügen Sie hier zusätzliche Zeichnungscode für Fenster 2 ein
+        // Beispiel: ein Kreis in der Mitte des Fensters
+        sf::CircleShape circle(50);
+        circle.setFillColor(sf::Color::Green);
+        circle.setPosition(window.getSize().x / 2 - circle.getRadius(), window.getSize().y / 2 - circle.getRadius());
+
+        window.draw(circle);
+
+        window.display();
+    }
+}
+
 // Run the game
 void Window::run() {
     sf::Clock clock;
@@ -48,16 +74,16 @@ void Window::ProcessEvents() {
 void Window::update() {
     sf::Vector2f Cmovement(0.f, 0.f);
     if (movingUpCricle) {
-        Cmovement.y -= 30.f;
+        Cmovement.y -= 20.f;
     }
     if (movingDownCricle) {
-        Cmovement.y += 30.f;
+        Cmovement.y += 20.f;
     }
     if (movingLeftCricle) {
-        Cmovement.x -= 30.f;
+        Cmovement.x -= 20.f;
     }
     if (movingRightCricle) {
-        Cmovement.x += 30.f;
+        Cmovement.x += 20.f;
     }
     draw.getCircle().move(Cmovement);
     //std::cout << "Circle Position: (" << draw.getCircle().getPosition().x << ", " << draw.getCircle().getPosition().y << ")" << std::endl;
@@ -80,7 +106,7 @@ void Window::update() {
 
 // Löscht den Bildschirm
 void Window::clear() {
-    window.clear(sf::Color::Black);
+    window.clear(sf::Color::Transparent);
 }
 
 // Zeichnet die Formen
@@ -137,6 +163,11 @@ void Window::handlePlayerInput(sf::Keyboard::Key key, bool isPressed) {
     if (key == sf::Keyboard::Right) {
         movingRightRec = isPressed;
         std::cout << "Right" << std::endl;
+    };
+    if (key == sf::Keyboard::Space) {
+        if (!window2Thread.joinable()) {
+            window2Thread = std::thread(Window2);
+        }
     };
     if (key == sf::Keyboard::Escape) {
         destroy();
