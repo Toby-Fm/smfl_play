@@ -1,7 +1,7 @@
 #include "./include/window.hpp"
 
 // Constructor
-Window::Window() {
+Window::Window() : window2FPS(0) {
     window.create(sf::VideoMode(WINDOW_HEIGHT, WINDOW_WIDTH), "Hello, World!");
     window.setFramerateLimit(144);
     draw.drawCircle();
@@ -9,8 +9,24 @@ Window::Window() {
 }
 
 // Funktion, die das zweite Fenster öffnet
-void Window2() {
+void Window2(std::atomic<float>& fps, std::mutex& fpsMutex) {
     sf::RenderWindow window(sf::VideoMode(400, 400), "Window 2");
+    sf::Clock clock;
+
+    sf::Font font;
+    if (!font.loadFromFile("assets/fonts/tahoma.ttf")) {
+        std::cerr << "Font konnte nicht geladen werden" << std::endl;
+        return;
+    }
+
+    sf::Text fpsText;
+    fpsText.setFont(font);
+    fpsText.setCharacterSize(24);
+    fpsText.setFillColor(sf::Color::White);
+    fpsText.setPosition(10.f, 10.f);
+
+    std::deque<float> fpsValues;
+    const int maxFPSValues = 100;
 
     while (window.isOpen()) {
         sf::Event event;
@@ -20,40 +36,74 @@ void Window2() {
             }
         }
 
+        // Berechne und aktualisiere die FPS
+        sf::Time elapsed = clock.restart();
+        float currentFPS = 1.0f / elapsed.asSeconds();
+        {
+            std::lock_guard<std::mutex> lock(fpsMutex); // Sperre den Mutex, bevor die FPS aktualisiert wird
+            fps = currentFPS;
+        }
+
+        // FPS-Werte aktualisieren
+        fpsValues.push_back(currentFPS);
+        if (fpsValues.size() > maxFPSValues) {
+            fpsValues.pop_front();
+        }
+
+        // Durchschnittliche FPS berechnen
+        float averageFPS = 0.0f;
+        for (float value : fpsValues) {
+            averageFPS += value;
+        }
+        averageFPS /= fpsValues.size();
+
+        fpsText.setString("FPS: " + std::to_string(averageFPS));
+
         window.clear(sf::Color::Black);
-
-        // Fügen Sie hier zusätzliche Zeichnungscode für Fenster 2 ein
-        // Beispiel: ein Kreis in der Mitte des Fensters
-        sf::CircleShape circle(50);
-        circle.setFillColor(sf::Color::Green);
-        circle.setPosition(window.getSize().x / 2 - circle.getRadius(), window.getSize().y / 2 - circle.getRadius());
-
-        window.draw(circle);
-
+        window.draw(fpsText);
         window.display();
     }
 }
-
+// End Window 2
 // Run the game
 void Window::run() {
     sf::Clock clock;
-    while (window.isOpen())
-    {
+    std::deque<float> fpsValues;
+    const int maxFPSValues = 100;
+
+    while (window.isOpen()) {
         ProcessEvents();
         update();
         render();
-        // Calculate FPS
+        // Berechne und aktualisiere die FPS
         sf::Time elapsed = clock.restart();
-        float fps = 1.0f / elapsed.asSeconds();
+        float currentFPS = 1.0f / elapsed.asSeconds();
+
+        // FPS-Werte aktualisieren
+        fpsValues.push_back(currentFPS);
+        if (fpsValues.size() > maxFPSValues) {
+            fpsValues.pop_front();
+        }
+
+        // Durchschnittliche FPS berechnen
+        float averageFPS = 0.0f;
+        for (float value : fpsValues) {
+            averageFPS += value;
+        }
+        averageFPS /= fpsValues.size();
+
         // Output FPS to console
-        std::cout << "FPS: " << fps << std::endl;
+        std::cout << "FPS: " << averageFPS << std::endl;
+    }
+
+    if (window2Thread.joinable()) {
+        window2Thread.join();
     }
 }
 
 void Window::ProcessEvents() {
     sf::Event event;
-    while (window.pollEvent(event))
-    {
+    while (window.pollEvent(event)) {
         switch (event.type) {
             case sf::Event::KeyPressed:
                 handlePlayerInput(event.key.code, true);
@@ -86,7 +136,6 @@ void Window::update() {
         Cmovement.x += 20.f;
     }
     draw.getCircle().move(Cmovement);
-    //std::cout << "Circle Position: (" << draw.getCircle().getPosition().x << ", " << draw.getCircle().getPosition().y << ")" << std::endl;
 
     sf::Vector2f Rmovement(0.f, 0.f);
     if (movingUpRec) {
@@ -114,7 +163,25 @@ void Window::drawObjectsOnScreen() {
     window.draw(draw.getCircle());
     window.draw(draw.getRectangle());
     drawText();
-    //drawFps();
+    drawFPS();
+}
+
+// Zeichnet den Text
+void Window::drawText() {
+    window.draw(draw.getText());
+}
+
+// Zeichnet die FPS von Fenster 2
+void Window::drawFPS() {
+    std::lock_guard<std::mutex> lock(fpsMutex); // Sperre den Mutex, bevor die FPS gelesen wird
+    float fps = window2FPS;
+    sf::Text fpsText;
+    fpsText.setFont(draw.getFont()); // Verwende die gleiche Schriftart wie für den Text
+    fpsText.setString("Window 2 FPS: " + std::to_string(fps));
+    fpsText.setCharacterSize(24); // Setze die Schriftgröße
+    fpsText.setFillColor(sf::Color::White); // Setze die Schriftfarbe
+    fpsText.setPosition(10.f, 50.f); // Setze die Position des Textes
+    window.draw(fpsText);
 }
 
 // Schließt das fenster
@@ -166,7 +233,7 @@ void Window::handlePlayerInput(sf::Keyboard::Key key, bool isPressed) {
     };
     if (key == sf::Keyboard::Space) {
         if (!window2Thread.joinable()) {
-            window2Thread = std::thread(Window2);
+            window2Thread = std::thread(Window2, std::ref(window2FPS), std::ref(fpsMutex));
         }
     };
     if (key == sf::Keyboard::Escape) {

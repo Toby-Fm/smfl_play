@@ -12,9 +12,9 @@ public:
     sf::RectangleShape& getRectangle() { return rectangle; }
 
     void drawText();
-    sf::Text getText() { return text; }
+    sf::Text& getText() { return text; } // Ändere die Rückgabe zu einem Referenztyp
+    sf::Font& getFont() { return font; } // Füge eine Methode hinzu, um die Schriftart zurückzugeben
 private:
-    sf::RenderWindow window;
     sf::CircleShape circle;
     sf::RectangleShape rectangle;
     sf::Font font;

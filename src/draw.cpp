@@ -2,7 +2,7 @@
 
 void Draw::drawCircle()
 {
-    // Erstelle einen cube
+    // Erstelle einen Kreis
     circle.setRadius(40.f);
     circle.setFillColor(sf::Color::Magenta);
     circle.setOutlineThickness(5.f);
@@ -29,7 +29,7 @@ void Draw::drawText()
     // Erstelle eine Schrift
     if (!font.loadFromFile("assets/fonts/tahoma.ttf"))
     {
-        std::cerr << "Font konnte nicht geladen werde" << std::endl;
+        std::cerr << "Font konnte nicht geladen werden" << std::endl;
         exit(1);
     }
 
@@ -39,5 +39,4 @@ void Draw::drawText()
     text.setFillColor(sf::Color::Red); // Setze die Schriftfarbe
     text.setFont(font); // Setze die Schriftart
     text.setStyle(sf::Text::Underlined);
-
 }
