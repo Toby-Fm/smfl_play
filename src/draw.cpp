@@ -34,7 +34,7 @@ void Draw::drawText()
     }
 
     // Text schreiben
-    text.setString("Deine Mutter"); // Setze den Text
+    text.setString("IDK"); // Setze den Text
     text.setCharacterSize(60); // Setze die Schriftgröße
     text.setFillColor(sf::Color::Red); // Setze die Schriftfarbe
     text.setFont(font); // Setze die Schriftart

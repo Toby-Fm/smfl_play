@@ -29,16 +29,12 @@ public:
 
 private:
     Draw draw;
-    void drawCircle();
-    void drawRectangles() { // Zeichnet das Rechteck
-        draw.drawRectangle();
-        window.draw(draw.getRectangle());
-    }
+    void drawCircle(); // Zeichnet den Kreis
+    void drawRectangles(); // Zeichnet die Rechtecke
     void drawText() { // Zeichnet den Text
         draw.drawText();
         window.draw(draw.getText());
     }
-
 private:
     void ProcessEvents();
     void update(); // Aktualisiert das Fenster
@@ -51,6 +47,7 @@ private:
     void handlePlayerInput(sf::Keyboard::Key key, bool isPressed);
 
     sf::RenderWindow window;
-    bool movingLeft = false, movingRight = false, movingUp = false, movingDown = false;
+    bool movingLeftCricle = false, movingRightCricle = false, movingUpCricle = false, movingDownCricle = false;
+    bool movingLeftRec = false, movingRightRec = false, movingUpRec = false, movingDownRec = false;
     //bool movingLeft, movingRight, movingUp, movingDown;
 };
