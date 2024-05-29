@@ -3,10 +3,10 @@
 void Draw::drawCircle()
 {
     // Erstelle einen cube
-    circle.setRadius(200.f);
-    circle.setFillColor(sf::Color::Yellow);
-    circle.setOutlineThickness(10.f);
-    circle.setOutlineColor(sf::Color(250, 150, 100));
+    circle.setRadius(40.f);
+    circle.setFillColor(sf::Color::Magenta);
+    circle.setOutlineThickness(5.f);
+    circle.setOutlineColor(sf::Color::Blue);
 
     // Setze die Position des Kreises
     circle.setPosition(100.f, 100.f);

@@ -15,36 +15,42 @@ enum class Key {
     Left,
     Right,
     Space,
-    Escape
+    Escape,
+    W,
+    A,
+    S,
+    D
 };
 
 class Window {
 public:
     Window();
     void run();
-    void drawCircle() { // Zeichnet den Kreis
-        Draw draw;
-        draw.drawCircle();
-        window.draw(draw.getCircle()); // Verwenden der getShape Methode
-    }
+
+private:
+    Draw draw;
+    void drawCircle();
     void drawRectangles() { // Zeichnet das Rechteck
-        Draw draw;
         draw.drawRectangle();
-        window.draw(draw.getRectangle()); // Verwenden der getRectangle Methode
+        window.draw(draw.getRectangle());
     }
     void drawText() { // Zeichnet den Text
-        Draw draw;
         draw.drawText();
-        window.draw(draw.getText()); // Verwenden der getText Methode
+        window.draw(draw.getText());
     }
+
 private:
+    void ProcessEvents();
+    void update(); // Aktualisiert das Fenster
     void clear(); // Löscht den Bildschirm
-    void draw(); // Zeichnet die Formen
-    void display(); // Zeigt die Formen an
+    void drawObjectsOnScreen(); // Zeichnet die Formen
     void destroy(); // Schließt das fenster
+    void render();
 
     // Key inputs
-    void keyInput();
+    void handlePlayerInput(sf::Keyboard::Key key, bool isPressed);
 
     sf::RenderWindow window;
+    bool movingLeft = false, movingRight = false, movingUp = false, movingDown = false;
+    //bool movingLeft, movingRight, movingUp, movingDown;
 };

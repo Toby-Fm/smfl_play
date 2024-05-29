@@ -6,10 +6,10 @@
 class Draw {
 public:
     void drawCircle();
-    sf::CircleShape getCircle() { return circle; }
+    sf::CircleShape& getCircle() { return circle; }
 
     void drawRectangle();
-    sf::RectangleShape getRectangle() { return rectangle; }
+    sf::RectangleShape& getRectangle() { return rectangle; }
 
     void drawText();
     sf::Text getText() { return text; }
