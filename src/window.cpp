@@ -3,27 +3,13 @@
 // Constructor
 Window::Window() {
     window.create(sf::VideoMode(WINDOW_HEIGHT, WINDOW_WIDTH), "Hello, World!");
-    /*
-    // Erstelle eine Schrift
-    if (!font.loadFromFile("assets/fonts/tahoma.ttf"))
-    {
-        std::cerr << "Font konnte nicht geladen werde" << std::endl;
-        exit(1);
-    }
-
-    // Text schreiben
-    text.setString("Deine Mutter"); // Setze den Text
-    text.setCharacterSize(60); // Setze die Schriftgröße
-    text.setFillColor(sf::Color::Red); // Setze die Schriftfarbe
-    text.setFont(font); // Setze die Schriftart
-    text.setStyle(sf::Text::Underlined);
-    */
 }
 
 // Run the game
 void Window::run() {
     while (window.isOpen()) 
     {
+        /*
         sf::Event event;
         while (window.pollEvent(event))
         {
@@ -32,23 +18,55 @@ void Window::run() {
                 window.close();
             }
         }
+        */
         clear();
         draw();
-        drawCubes();
-        drawRectangles();
+        keyInput();
         display();
     }
 }
 
+// Löscht den Bildschirm
 void Window::clear() {
     window.clear(sf::Color::Black);
 }
 
+// Zeichnet die Formen
 void Window::draw() {
-    window.draw(text);
-    window.draw(shape);
+    drawCircle();
+    drawRectangles();
+    drawText();
 }
+
 
 void Window::display() {
     window.display();
+}
+
+// Schließt das fenster
+void Window::destroy() {
+    window.close();
+}
+
+// Key inputs
+void Window::keyInput() {
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+        std::cout << "Up" << std::endl;
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+        std::cout << "Down" << std::endl;
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+        std::cout << "Left" << std::endl;
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+        std::cout << "Space" << std::endl;
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
+        // Close window
+        destroy();
+    }
 }
