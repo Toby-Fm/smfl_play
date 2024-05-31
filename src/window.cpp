@@ -40,7 +40,7 @@ void Window::run() {
         averageFPS /= fpsValues.size();
 
         // Output FPS to console
-        std::cout << "FPS: " << averageFPS << std::endl;
+        //std::cout << "FPS: " << averageFPS << std::endl;
     }
 }
 
@@ -218,4 +218,46 @@ void Window::handleCollisions() {
         draw.getCircle().setPosition(draw.getCircle().getPosition().x, windowHeight - draw.getCircle().getRadius() * 2);
         std::cout << "Circle hat den unteren Rand berührt!" << std::endl;
     };
+
+    // Kollision zwischen Circle und Rectangle erkennen und blockieren
+    if (draw.getCircle().getGlobalBounds().intersects(draw.getRectangle().getGlobalBounds())) {
+        sf::FloatRect circleBounds = draw.getCircle().getGlobalBounds();
+        sf::FloatRect rectBounds = draw.getRectangle().getGlobalBounds();
+        float circleRadius = draw.getCircle().getRadius();
+
+        sf::Vector2f circlePosition = draw.getCircle().getPosition();
+        sf::Vector2f rectanglePosition = draw.getRectangle().getPosition();
+        sf::Vector2f rectangleSize = sf::Vector2f(rectBounds.width, rectBounds.height);
+
+        float leftRect = rectanglePosition.x;
+        float rightRect = rectanglePosition.x + rectangleSize.x;
+        float topRect = rectanglePosition.y;
+        float bottomRect = rectanglePosition.y + rectangleSize.y;
+
+        float leftCircle = circlePosition.x - circleRadius;
+        float rightCircle = circlePosition.x + circleRadius;
+        float topCircle = circlePosition.y - circleRadius;
+        float bottomCircle = circlePosition.y + circleRadius;
+
+        if (circleBounds.left < rectBounds.left && circleBounds.left + circleBounds.width > rectBounds.left) {
+            // Kreis kommt von links
+            draw.getCircle().setPosition(rectBounds.left - circleRadius, draw.getCircle().getPosition().y);
+        }
+        else if (circleBounds.left + circleBounds.width > rectBounds.left + rectBounds.width && circleBounds.left < rectBounds.left + rectBounds.width) {
+            // Kreis kommt von rechts
+            draw.getCircle().setPosition(rectBounds.left + rectBounds.width + circleRadius, draw.getCircle().getPosition().y);
+        }
+        if (bottomCircle > topRect && topCircle < topRect) {
+            // Kreis kommt von oben
+            draw.getCircle().setPosition(circlePosition.x, topRect - circleRadius);
+        }
+        if (topCircle < bottomRect && bottomCircle > bottomRect) {
+            // Kreis kommt von unten
+            draw.getCircle().setPosition(circlePosition.x, bottomRect + circleRadius);
+        }
+        std::cout << "Kollision zwischen Rec und Circle erkannt!" << std::endl;
+    }
+
+
+
 }
