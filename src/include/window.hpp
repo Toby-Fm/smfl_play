@@ -13,16 +13,8 @@
 
 // Klasse für die Tastatureingaben
 enum class Key {
-    Up,
-    Down,
-    Left,
-    Right,
-    Space,
-    Escape,
-    W,
-    A,
-    S,
-    D
+    Up, Down, Left, Right, Space, Escape,
+    W, A, S, D, F
 };
 
 class Window {
@@ -35,7 +27,6 @@ private:
     void drawCircle(); // Zeichnet den Kreis
     void drawRectangles(); // Zeichnet die Rechtecke
     void drawText(); // Zeichnet den Text
-    void drawFPS(); // Zeichnet die FPS von Fenster 2
 private:
     void ProcessEvents();
     void update(); // Aktualisiert das Fenster
@@ -43,20 +34,15 @@ private:
     void drawObjectsOnScreen(); // Zeichnet die Formen
     void destroy(); // Schließt das fenster
     void render();
+    void renderFPS(); // Zeichnet die FPS
 
-    // Key inputs
-    void handlePlayerInput(sf::Keyboard::Key key, bool isPressed);
+    void handlePlayerInput(sf::Keyboard::Key key, bool isPressed); // Key inputs
+    void handleCollisions(); // Kollisionsabfrage
 
     sf::RenderWindow window;
+
     bool movingLeftCricle = false, movingRightCricle = false, movingUpCricle = false, movingDownCricle = false;
     bool movingLeftRec = false, movingRightRec = false, movingUpRec = false, movingDownRec = false;
-    std::thread window2Thread;
-
-    std::atomic<float> window2FPS; // Gemeinsame Variable für FPS von Fenster 2
-    std::mutex fpsMutex; // Mutex für den Zugriff auf die FPS-Variable
-
-    std::deque<float> fpsValues; // Liste der letzten FPS-Werte
-    static const int maxFPSValues = 100; // Maximale Anzahl an FPS-Werten für den Durchschnitt
 };
 
 // Funktion, die das zweite Fenster öffnet

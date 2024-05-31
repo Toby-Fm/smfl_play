@@ -1,80 +1,27 @@
 #include "./include/window.hpp"
 
 // Constructor
-Window::Window() : window2FPS(0) {
-    window.create(sf::VideoMode(WINDOW_HEIGHT, WINDOW_WIDTH), "Hello, World!");
+Window::Window() {
+    window.create(sf::VideoMode(WINDOW_HEIGHT, WINDOW_WIDTH), "Game", sf::Style::None | sf::Style::Titlebar | sf::Style::Close);
     window.setFramerateLimit(144);
+    //window.setVerticalSyncEnabled(true);
+
     draw.drawCircle();
     draw.drawRectangle();
 }
-
-// Funktion, die das zweite Fenster öffnet
-void Window2(std::atomic<float>& fps, std::mutex& fpsMutex) {
-    sf::RenderWindow window(sf::VideoMode(400, 400), "Window 2");
-    sf::Clock clock;
-
-    sf::Font font;
-    if (!font.loadFromFile("assets/fonts/tahoma.ttf")) {
-        std::cerr << "Font konnte nicht geladen werden" << std::endl;
-        return;
-    }
-
-    sf::Text fpsText;
-    fpsText.setFont(font);
-    fpsText.setCharacterSize(24);
-    fpsText.setFillColor(sf::Color::White);
-    fpsText.setPosition(10.f, 10.f);
-
-    std::deque<float> fpsValues;
-    const int maxFPSValues = 100;
-
-    while (window.isOpen()) {
-        sf::Event event;
-        while (window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed) {
-                window.close();
-            }
-        }
-
-        // Berechne und aktualisiere die FPS
-        sf::Time elapsed = clock.restart();
-        float currentFPS = 1.0f / elapsed.asSeconds();
-        {
-            std::lock_guard<std::mutex> lock(fpsMutex); // Sperre den Mutex, bevor die FPS aktualisiert wird
-            fps = currentFPS;
-        }
-
-        // FPS-Werte aktualisieren
-        fpsValues.push_back(currentFPS);
-        if (fpsValues.size() > maxFPSValues) {
-            fpsValues.pop_front();
-        }
-
-        // Durchschnittliche FPS berechnen
-        float averageFPS = 0.0f;
-        for (float value : fpsValues) {
-            averageFPS += value;
-        }
-        averageFPS /= fpsValues.size();
-
-        fpsText.setString("FPS: " + std::to_string(averageFPS));
-
-        window.clear(sf::Color::Black);
-        window.draw(fpsText);
-        window.display();
-    }
-}
-// End Window 2
 // Run the game
 void Window::run() {
     sf::Clock clock;
     std::deque<float> fpsValues;
-    const int maxFPSValues = 100;
+    const int maxFPSValues = 144;
 
     while (window.isOpen()) {
         ProcessEvents();
         update();
         render();
+        handleCollisions();
+        renderFPS();
+
         // Berechne und aktualisiere die FPS
         sf::Time elapsed = clock.restart();
         float currentFPS = 1.0f / elapsed.asSeconds();
@@ -94,10 +41,6 @@ void Window::run() {
 
         // Output FPS to console
         std::cout << "FPS: " << averageFPS << std::endl;
-    }
-
-    if (window2Thread.joinable()) {
-        window2Thread.join();
     }
 }
 
@@ -163,25 +106,11 @@ void Window::drawObjectsOnScreen() {
     window.draw(draw.getCircle());
     window.draw(draw.getRectangle());
     drawText();
-    drawFPS();
 }
 
 // Zeichnet den Text
 void Window::drawText() {
     window.draw(draw.getText());
-}
-
-// Zeichnet die FPS von Fenster 2
-void Window::drawFPS() {
-    std::lock_guard<std::mutex> lock(fpsMutex); // Sperre den Mutex, bevor die FPS gelesen wird
-    float fps = window2FPS;
-    sf::Text fpsText;
-    fpsText.setFont(draw.getFont()); // Verwende die gleiche Schriftart wie für den Text
-    fpsText.setString("Window 2 FPS: " + std::to_string(fps));
-    fpsText.setCharacterSize(24); // Setze die Schriftgröße
-    fpsText.setFillColor(sf::Color::White); // Setze die Schriftfarbe
-    fpsText.setPosition(10.f, 50.f); // Setze die Position des Textes
-    window.draw(fpsText);
 }
 
 // Schließt das fenster
@@ -197,46 +126,96 @@ void Window::render() {
     window.display();
 }
 
+void Window::renderFPS() {
+
+};
+
 // Handle player input
 void Window::handlePlayerInput(sf::Keyboard::Key key, bool isPressed) {
     if (key == sf::Keyboard::W) {
         movingUpCricle = isPressed;
-        std::cout << "W" << std::endl;
+        //std::cout << "W" << std::endl;
     };
     if (key == sf::Keyboard::S) {
         movingDownCricle = isPressed;
-        std::cout << "S" << std::endl;
+        //std::cout << "S" << std::endl;
     };
     if (key == sf::Keyboard::A) {
         movingLeftCricle = isPressed;
-        std::cout << "A" << std::endl;
+        //std::cout << "A" << std::endl;
     };
     if (key == sf::Keyboard::D) {
         movingRightCricle = isPressed;
-        std::cout << "D" << std::endl;
+        //std::cout << "D" << std::endl;
     };
     if (key == sf::Keyboard::Up) {
         movingUpRec = isPressed;
-        std::cout << "Up" << std::endl;
+        //std::cout << "Up" << std::endl;
     };
     if (key == sf::Keyboard::Down) {
         movingDownRec = isPressed;
-        std::cout << "Down" << std::endl;
+        //std::cout << "Down" << std::endl;
     };
     if (key == sf::Keyboard::Left) {
         movingLeftRec = isPressed;
-        std::cout << "Left" << std::endl;
+        //std::cout << "Left" << std::endl;
     };
     if (key == sf::Keyboard::Right) {
         movingRightRec = isPressed;
-        std::cout << "Right" << std::endl;
-    };
-    if (key == sf::Keyboard::Space) {
-        if (!window2Thread.joinable()) {
-            window2Thread = std::thread(Window2, std::ref(window2FPS), std::ref(fpsMutex));
-        }
+        //std::cout << "Right" << std::endl;
     };
     if (key == sf::Keyboard::Escape) {
         destroy();
     }
+}
+
+void Window::handleCollisions() {
+    // Finde Screen resolution für Kollision
+    int windowHeight = window.getSize().y; // Höhe des Fensters
+    int windowWidth = window.getSize().x; // Breite des Fensters
+
+    /* Collision detection */
+    // Für Rectangle
+    /* Linker Rand */
+    if (draw.getRectangle().getPosition().x < 0) {
+        draw.getRectangle().setPosition(0, draw.getRectangle().getPosition().y);
+        std::cout << "Rectangle hat den linken Rand berührt!" << std::endl;
+    };
+    /* Rechter Rand */
+    if (draw.getRectangle().getPosition().x + draw.getRectangle().getSize().x > windowWidth) {
+        draw.getRectangle().setPosition(windowWidth - draw.getRectangle().getSize().x, draw.getRectangle().getPosition().y);
+        std::cout << "Rectangle hat den rechten Rand berührt!" << std::endl;
+    };
+    /* Oberen Rand */
+    if (draw.getRectangle().getPosition().y < 0) {
+        draw.getRectangle().setPosition(draw.getRectangle().getPosition().x, 0);
+        std::cout << "Rectangle hat den oberen Rand berührt!" << std::endl;
+    };
+    /* Unteren Rand */
+    if (draw.getRectangle().getPosition().y + draw.getRectangle().getSize().y > windowHeight) {
+        draw.getRectangle().setPosition(draw.getRectangle().getPosition().x, windowHeight - draw.getRectangle().getSize().y);
+        std::cout << "Rectangle hat den unteren Rand berührt!" << std::endl;
+    };
+
+    // Für Circle
+    /* Linker Rand */
+    if (draw.getCircle().getPosition().x < 0) {
+        draw.getCircle().setPosition(0, draw.getCircle().getPosition().y);
+        std::cout << "Circle hat den linken Rand berührt!" << std::endl;
+    };
+    /* Rechter Rand */
+    if (draw.getCircle().getPosition().x + draw.getCircle().getRadius() * 2 > windowWidth) {
+        draw.getCircle().setPosition(windowWidth - draw.getCircle().getRadius() * 2, draw.getCircle().getPosition().y);
+        std::cout << "Circle hat den rechten Rand berührt!" << std::endl;
+    };
+    /* Oberen Rand */
+    if (draw.getCircle().getPosition().y < 0) {
+        draw.getCircle().setPosition(draw.getCircle().getPosition().x, 0);
+        std::cout << "Circle hat den oberen Rand berührt!" << std::endl;
+    };
+    /* Unteren Rand */
+    if (draw.getCircle().getPosition().y + draw.getCircle().getRadius() * 2 > windowHeight) {
+        draw.getCircle().setPosition(draw.getCircle().getPosition().x, windowHeight - draw.getCircle().getRadius() * 2);
+        std::cout << "Circle hat den unteren Rand berührt!" << std::endl;
+    };
 }
