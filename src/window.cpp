@@ -127,7 +127,7 @@ void Window::render() {
 }
 
 void Window::renderFPS() {
-
+    return;
 };
 
 // Handle player input
@@ -257,7 +257,4 @@ void Window::handleCollisions() {
         }
         std::cout << "Kollision zwischen Rec und Circle erkannt!" << std::endl;
     }
-
-
-
 }
