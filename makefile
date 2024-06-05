@@ -6,7 +6,6 @@ all:
 
 linux-install:
 	@echo "Install abhängigkeiten"
-	sudo apt-get install libsfml-dev -y
-
+	sudo apt-get install libsfml-dev libxrandr-dev libxcursor-dev libudev-dev libfreetype-dev libopenal-dev libflac-dev libvorbis-dev libgl1-mesa-dev libegl1-mesa-dev -y
 clean:
 	rm -rf main
