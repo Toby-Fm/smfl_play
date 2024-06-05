@@ -113,7 +113,9 @@ void Window::drawText() {
     window.draw(draw.getText());
 }
 
-// Schließt das fenster
+/**
+ * @brief Die Funktion schließt das Fenster
+ */
 void Window::destroy() {
     std::cout << "Fenster wird geschlossen" << std::endl;
     window.close();
