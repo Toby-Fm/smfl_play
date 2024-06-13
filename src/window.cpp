@@ -183,23 +183,26 @@ void Window::handleCollisions() {
     if (draw.getRectangle().getPosition().x < 0) {
         draw.getRectangle().setPosition(0, draw.getRectangle().getPosition().y);
         std::cout << "Rectangle hat den linken Rand berührt!" << std::endl;
+        sound.hitSound();
     };
     /* Rechter Rand */
     if (draw.getRectangle().getPosition().x + draw.getRectangle().getSize().x > windowWidth) {
         draw.getRectangle().setPosition(windowWidth - draw.getRectangle().getSize().x, draw.getRectangle().getPosition().y);
         std::cout << "Rectangle hat den rechten Rand berührt!" << std::endl;
+        sound.hitSound();
     };
     /* Oberen Rand */
     if (draw.getRectangle().getPosition().y < 0) {
         draw.getRectangle().setPosition(draw.getRectangle().getPosition().x, 0);
         std::cout << "Rectangle hat den oberen Rand berührt!" << std::endl;
+        sound.hitSound();
     };
     /* Unteren Rand */
     if (draw.getRectangle().getPosition().y + draw.getRectangle().getSize().y > windowHeight) {
         draw.getRectangle().setPosition(draw.getRectangle().getPosition().x, windowHeight - draw.getRectangle().getSize().y);
         std::cout << "Rectangle hat den unteren Rand berührt!" << std::endl;
         // Sound abspielen
-        sound.fahrradklingelSound();
+        sound.hitSound();
     };
 
     // Für Circle
@@ -207,23 +210,25 @@ void Window::handleCollisions() {
     if (draw.getCircle().getPosition().x < 0) {
         draw.getCircle().setPosition(0, draw.getCircle().getPosition().y);
         std::cout << "Circle hat den linken Rand berührt!" << std::endl;
+        sound.hitSound();
     };
     /* Rechter Rand */
     if (draw.getCircle().getPosition().x + draw.getCircle().getRadius() * 2 > windowWidth) {
         draw.getCircle().setPosition(windowWidth - draw.getCircle().getRadius() * 2, draw.getCircle().getPosition().y);
         std::cout << "Circle hat den rechten Rand berührt!" << std::endl;
+        sound.hitSound();
     };
     /* Oberen Rand */
     if (draw.getCircle().getPosition().y < 0) {
         draw.getCircle().setPosition(draw.getCircle().getPosition().x, 0);
         std::cout << "Circle hat den oberen Rand berührt!" << std::endl;
+        sound.hitSound();
     };
     /* Unteren Rand */
     if (draw.getCircle().getPosition().y + draw.getCircle().getRadius() * 2 > windowHeight) {
         draw.getCircle().setPosition(draw.getCircle().getPosition().x, windowHeight - draw.getCircle().getRadius() * 2);
         std::cout << "Circle hat den unteren Rand berührt!" << std::endl;
-        // Sound abspielen
-        sound.fahrradklingelSound();
+        sound.hitSound();
     };
 
     // Kollision zwischen Circle und Rectangle erkennen und blockieren

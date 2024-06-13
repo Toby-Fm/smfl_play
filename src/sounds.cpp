@@ -16,3 +16,29 @@ void sounds::fahrradklingelSound() {
     sound.setBuffer(buffer);
     sound.play();
 }
+
+// Hit Sound
+void sounds::hitSound() {
+    // SFML AUDIO
+    if (!buffer.loadFromFile("assets/wav/hitSound.wav")) {
+        std::cout << "Error loading sound" << std::endl;
+    } else {
+        std::cout << "Sound loaded" << std::endl;
+    }
+    sound.setBuffer(buffer);
+    sound.setVolume(10);
+    sound.play();
+}
+
+// Hintergrund Musik
+void sounds::backgroundMusic() {
+    // SFML AUDIO
+    if (!buffer.loadFromFile("assets/wav/bgSound.wav")) {
+        std::cout << "Error loading sound" << std::endl;
+    } else {
+        std::cout << "Sound loaded" << std::endl;
+    }
+    sound.setBuffer(buffer);
+    sound.setVolume(10);
+    sound.play();
+}

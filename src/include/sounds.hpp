@@ -12,6 +12,8 @@ public:
     sf::SoundBuffer buffer;
     sf::Sound sound;
     void fahrradklingelSound();
+    void hitSound();
+    void backgroundMusic();
 };
 
 
