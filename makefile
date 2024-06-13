@@ -2,7 +2,7 @@
 # Date: 28.05.2024
 
 all:
-	g++ -std=c++20 -Isrc/include ./src/*.cpp -o main -lsfml-graphics -lsfml-window -lsfml-system && ./main
+	g++ -std=c++20 -Isrc/include ./src/*.cpp -o main -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio && ./main
 
 linux-install:
 	@echo "Install abhängigkeiten"

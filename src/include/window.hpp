@@ -1,6 +1,8 @@
 #pragma once
 
 #include "draw.hpp"
+#include "sounds.hpp"
+
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <thread>
@@ -24,10 +26,12 @@ public:
 
 private:
     Draw draw;
+	sounds sound;
+
     void drawCircle(); // Zeichnet den Kreis
     void drawRectangles(); // Zeichnet die Rechtecke
     void drawText(); // Zeichnet den Text
-private:
+
     void ProcessEvents();
     void update(); // Aktualisiert das Fenster
     void clear(); // Löscht den Bildschirm
@@ -41,7 +45,7 @@ private:
 
     sf::RenderWindow window;
 
-    bool movingLeftCricle = false, movingRightCricle = false, movingUpCricle = false, movingDownCricle = false;
+	bool movingLeftCricle = false, movingRightCricle = false, movingUpCricle = false, movingDownCricle = false;
     bool movingLeftRec = false, movingRightRec = false, movingUpRec = false, movingDownRec = false;
 };
 

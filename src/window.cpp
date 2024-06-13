@@ -130,12 +130,13 @@ void Window::render() {
 
 void Window::renderFPS() {
     return;
-};
+}
 
 // Handle player input
 void Window::handlePlayerInput(sf::Keyboard::Key key, bool isPressed) {
     if (key == sf::Keyboard::W) {
         movingUpCricle = isPressed;
+
         //std::cout << "W" << std::endl;
     };
     if (key == sf::Keyboard::S) {
@@ -197,6 +198,8 @@ void Window::handleCollisions() {
     if (draw.getRectangle().getPosition().y + draw.getRectangle().getSize().y > windowHeight) {
         draw.getRectangle().setPosition(draw.getRectangle().getPosition().x, windowHeight - draw.getRectangle().getSize().y);
         std::cout << "Rectangle hat den unteren Rand berührt!" << std::endl;
+        // Sound abspielen
+        sound.fahrradklingelSound();
     };
 
     // Für Circle
@@ -219,6 +222,8 @@ void Window::handleCollisions() {
     if (draw.getCircle().getPosition().y + draw.getCircle().getRadius() * 2 > windowHeight) {
         draw.getCircle().setPosition(draw.getCircle().getPosition().x, windowHeight - draw.getCircle().getRadius() * 2);
         std::cout << "Circle hat den unteren Rand berührt!" << std::endl;
+        // Sound abspielen
+        sound.fahrradklingelSound();
     };
 
     // Kollision zwischen Circle und Rectangle erkennen und blockieren
