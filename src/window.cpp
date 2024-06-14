@@ -5,9 +5,14 @@ Window::Window() {
     window.create(sf::VideoMode(WINDOW_HEIGHT, WINDOW_WIDTH), "Game", sf::Style::None | sf::Style::Titlebar | sf::Style::Close);
     window.setFramerateLimit(144);
     //window.setVerticalSyncEnabled(true);
+    // Grid in Background zeichnen
+    drawGrid(); // Initiale Erstellung des Gitters mit zufälligen Farben
+    std::srand(std::time(nullptr)); // Seed für Zufallszahlengenerator
 
+    // Objekte zeichnen
     draw.drawCircle();
     draw.drawRectangle();
+
 }
 // Run the game
 void Window::run() {
@@ -101,8 +106,34 @@ void Window::clear() {
     window.clear(sf::Color::Transparent);
 }
 
+// Zeichnet das Gitter
+void Window::drawGrid() {
+    int gridSize = 100; // Größe der Gitterzellen
+    sf::Vector2u windowSize = window.getSize(); // Dynamische Abfrage der Fenstergröße
+
+    gridCells.clear();
+
+    for (int x = 0; x < windowSize.x; x += gridSize) {
+        for (int y = 0; y < windowSize.y; y += gridSize) {
+            sf::RectangleShape cell(sf::Vector2f(gridSize, gridSize));
+            cell.setPosition(x, y);
+            cell.setOutlineColor(sf::Color::White);
+            cell.setOutlineThickness(1);
+
+            // Zufällige Farbe
+            sf::Color randomColor(rand() % 1, rand() % 1, rand() % 1);
+            cell.setFillColor(randomColor);
+
+            gridCells.push_back(cell);
+        }
+    }
+}
+
 // Zeichnet die Formen
 void Window::drawObjectsOnScreen() {
+    for (const auto& cell : gridCells) {
+        window.draw(cell);
+    }
     window.draw(draw.getCircle());
     window.draw(draw.getRectangle());
     drawText();

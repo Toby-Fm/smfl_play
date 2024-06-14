@@ -28,6 +28,7 @@ void sounds::hitSound() {
     sound.setBuffer(buffer);
     sound.setVolume(10);
     sound.play();
+	//sound.setLoop(true);
 }
 
 // Hintergrund Musik

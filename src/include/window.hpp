@@ -9,9 +9,11 @@
 #include <atomic>
 #include <mutex>
 #include <deque>
+#include <cstdlib>
+#include <ctime>
 
-#define WINDOW_HEIGHT 1400
-#define WINDOW_WIDTH 800
+#define WINDOW_HEIGHT 1920
+#define WINDOW_WIDTH 1080
 
 // Klasse für die Tastatureingaben
 enum class Key {
@@ -26,7 +28,7 @@ public:
 
 private:
     Draw draw;
-	sounds sound;
+    sounds sound;
 
     void drawCircle(); // Zeichnet den Kreis
     void drawRectangles(); // Zeichnet die Rechtecke
@@ -35,6 +37,7 @@ private:
     void ProcessEvents();
     void update(); // Aktualisiert das Fenster
     void clear(); // Löscht den Bildschirm
+    void drawGrid(); // Zeichnet das BG - Gitter
     void drawObjectsOnScreen(); // Zeichnet die Formen
     void destroy(); // Schließt das fenster
     void render();
@@ -45,7 +48,8 @@ private:
 
     sf::RenderWindow window;
 
-	bool movingLeftCricle = false, movingRightCricle = false, movingUpCricle = false, movingDownCricle = false;
+    std::vector<sf::RectangleShape> gridCells;
+    bool movingLeftCricle = false, movingRightCricle = false, movingUpCricle = false, movingDownCricle = false;
     bool movingLeftRec = false, movingRightRec = false, movingUpRec = false, movingDownRec = false;
 };
 
