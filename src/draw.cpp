@@ -19,11 +19,10 @@ void Draw::drawRectangle()
     rectangle.setFillColor(sf::Color::Green);
     rectangle.setOutlineThickness(5.f);
     rectangle.setOutlineColor(sf::Color::Blue);
-
     // Setze die Position des Rechtecks
     rectangle.setPosition(600.f, 200.f);
 }
-
+/*
 void Draw::drawText()
 {
     // Erstelle eine Schrift
@@ -40,3 +39,4 @@ void Draw::drawText()
     text.setFont(font); // Setze die Schriftart
     text.setStyle(sf::Text::Underlined);
 }
+*/

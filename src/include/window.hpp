@@ -1,9 +1,14 @@
 #pragma once
 
+#ifndef WINDOW_HPP
+#define WINDOW_HPP
+
+
 #include "draw.hpp"
 #include "sounds.hpp"
 
 #include <SFML/Graphics.hpp>
+#include <SFML/Window/Mouse.hpp>
 #include <iostream>
 #include <thread>
 #include <atomic>
@@ -12,8 +17,8 @@
 #include <cstdlib>
 #include <ctime>
 
-#define WINDOW_HEIGHT 1920
-#define WINDOW_WIDTH 1080
+#define WINDOW_HEIGHT 1400
+#define WINDOW_WIDTH 800
 
 // Klasse für die Tastatureingaben
 enum class Key {
@@ -32,7 +37,7 @@ private:
 
     void drawCircle(); // Zeichnet den Kreis
     void drawRectangles(); // Zeichnet die Rechtecke
-    void drawText(); // Zeichnet den Text
+    void drawMousePointer();
 
     void ProcessEvents();
     void update(); // Aktualisiert das Fenster
@@ -53,5 +58,4 @@ private:
     bool movingLeftRec = false, movingRightRec = false, movingUpRec = false, movingDownRec = false;
 };
 
-// Funktion, die das zweite Fenster öffnet
-void Window2(std::atomic<float>& fps, std::mutex& fpsMutex);
+#endif // WINDOW_HPP

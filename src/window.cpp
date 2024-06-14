@@ -1,4 +1,5 @@
-#include "./include/window.hpp"
+#include "window.hpp"
+#include "draw.hpp"
 
 // Constructor
 Window::Window() {
@@ -12,8 +13,8 @@ Window::Window() {
     // Objekte zeichnen
     draw.drawCircle();
     draw.drawRectangle();
-
 }
+
 // Run the game
 void Window::run() {
     sf::Clock clock;
@@ -44,6 +45,13 @@ void Window::run() {
         }
         averageFPS /= fpsValues.size();
 
+        // Mausposition überprüfen und ausgeben
+        sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
+        if (mousePosition.x < 0 || mousePosition.x > window.getSize().x || mousePosition.y < 0 || mousePosition.y > window.getSize().y) {
+            //std::cout << "Maus ist außerhalb des Fensters!" << std::endl;
+        } else {
+            std::cout << "X: " << mousePosition.x << " Y: " << mousePosition.y << std::endl;
+        }
         // Output FPS to console
         //std::cout << "FPS: " << averageFPS << std::endl;
     }
@@ -136,14 +144,24 @@ void Window::drawObjectsOnScreen() {
     }
     window.draw(draw.getCircle());
     window.draw(draw.getRectangle());
-    drawText();
+    //drawText();
+    drawMousePointer(); // Zeichnen des Mauszeigers
 }
 
+// Zeichnet Kreis beim Mauszeiger und verfolgt diesen
+void Window::drawMousePointer() {
+    sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
+    sf::CircleShape mousePointer(5.f);
+    mousePointer.setFillColor(sf::Color::Red);
+    mousePointer.setPosition(static_cast<float>(mousePosition.x), static_cast<float>(mousePosition.y));
+    window.draw(mousePointer);
+}
+/*
 // Zeichnet den Text
 void Window::drawText() {
     window.draw(draw.getText());
 }
-
+*/
 /**
  * @brief Die Funktion schließt das Fenster
  */

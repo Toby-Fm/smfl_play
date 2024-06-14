@@ -10,11 +10,13 @@ public:
 
     void drawRectangle();
     sf::RectangleShape& getRectangle() { return rectangle; }
-
+    /*
     void drawText();
     sf::Text& getText() { return text; } // Ändere die Rückgabe zu einem Referenztyp
     sf::Font& getFont() { return font; } // Füge eine Methode hinzu, um die Schriftart zurückzugeben
+    */
 private:
+
     sf::CircleShape circle;
     sf::RectangleShape rectangle;
     sf::Font font;
