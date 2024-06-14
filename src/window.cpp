@@ -1,5 +1,6 @@
 #include "window.hpp"
 #include "draw.hpp"
+#include <cmath>
 
 // Constructor
 Window::Window() {
@@ -155,7 +156,39 @@ void Window::drawMousePointer() {
     mousePointer.setFillColor(sf::Color::Red);
     mousePointer.setPosition(static_cast<float>(mousePosition.x), static_cast<float>(mousePosition.y));
     window.draw(mousePointer);
+
+    // Linien vom Punkt in verschiedene Richtungen
+    int numberOfLines = 200; // Anzahl der Linien
+    float angleStep = 2 * 3.14159f / numberOfLines; // Winkel-Schritt
+    for (int i = 0; i < numberOfLines; ++i) {
+        float angle = i * angleStep;
+        float dx = cos(angle);
+        float dy = sin(angle);
+
+        // Finden des Schnittpunkts mit dem Fensterrand
+        float tMax = std::numeric_limits<float>::max();
+        if (dx != 0) {
+            float t1 = (0 - mousePosition.x) / dx;
+            float t2 = (window.getSize().x - mousePosition.x) / dx;
+            tMax = std::min(tMax, std::max(t1, t2));
+        }
+        if (dy != 0) {
+            float t1 = (0 - mousePosition.y) / dy;
+            float t2 = (window.getSize().y - mousePosition.y) / dy;
+            tMax = std::min(tMax, std::max(t1, t2));
+        }
+
+        sf::Vector2f endPoint(mousePosition.x + tMax * dx, mousePosition.y + tMax * dy);
+        sf::Vertex line[] =
+        {
+            sf::Vertex(sf::Vector2f(static_cast<float>(mousePosition.x), static_cast<float>(mousePosition.y)), sf::Color::Red),
+            sf::Vertex(endPoint, sf::Color::Red)
+        };
+
+        window.draw(line, 2, sf::Lines);
+    }
 }
+
 /*
 // Zeichnet den Text
 void Window::drawText() {
