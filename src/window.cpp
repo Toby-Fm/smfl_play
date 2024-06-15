@@ -14,6 +14,7 @@ Window::Window() {
     // Objekte zeichnen
     draw.drawCircle();
     draw.drawRectangle();
+    draw.drawTriangle();
 }
 
 // Run the game
@@ -45,14 +46,6 @@ void Window::run() {
             averageFPS += value;
         }
         averageFPS /= fpsValues.size();
-
-        // Mausposition überprüfen und ausgeben
-        sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
-        if (mousePosition.x < 0 || mousePosition.x > window.getSize().x || mousePosition.y < 0 || mousePosition.y > window.getSize().y) {
-            //std::cout << "Maus ist außerhalb des Fensters!" << std::endl;
-        } else {
-            std::cout << "X: " << mousePosition.x << " Y: " << mousePosition.y << std::endl;
-        }
         // Output FPS to console
         //std::cout << "FPS: " << averageFPS << std::endl;
     }
@@ -145,6 +138,7 @@ void Window::drawObjectsOnScreen() {
     }
     window.draw(draw.getCircle());
     window.draw(draw.getRectangle());
+    window.draw(draw.getTriangle());
     //drawText();
     drawMousePointer(); // Zeichnen des Mauszeigers
 }
@@ -157,35 +151,41 @@ void Window::drawMousePointer() {
     mousePointer.setPosition(static_cast<float>(mousePosition.x), static_cast<float>(mousePosition.y));
     window.draw(mousePointer);
 
-    // Linien vom Punkt in verschiedene Richtungen
-    int numberOfLines = 200; // Anzahl der Linien
-    float angleStep = 2 * 3.14159f / numberOfLines; // Winkel-Schritt
-    for (int i = 0; i < numberOfLines; ++i) {
-        float angle = i * angleStep;
-        float dx = cos(angle);
-        float dy = sin(angle);
+    // Mausposition überprüfen und ausgeben
+    if (mousePosition.x < 0 || mousePosition.x > window.getSize().x || mousePosition.y < 0 || mousePosition.y > window.getSize().y) {
+        //std::cout << "Maus ist außerhalb des Fensters!" << std::endl;
+    } else {
+        //std::cout << "X: " << mousePosition.x << " Y: " << mousePosition.y << std::endl;
+        // Linien vom Punkt in verschiedene Richtungen
+        int numberOfLines = 50; // Anzahl der Linien
+        float angleStep = 2 * 3.14159f / numberOfLines; // Winkel-Schritt
+        for (int i = 0; i < numberOfLines; ++i) {
+            float angle = i * angleStep;
+            float dx = cos(angle);
+            float dy = sin(angle);
 
-        // Finden des Schnittpunkts mit dem Fensterrand
-        float tMax = std::numeric_limits<float>::max();
-        if (dx != 0) {
-            float t1 = (0 - mousePosition.x) / dx;
-            float t2 = (window.getSize().x - mousePosition.x) / dx;
-            tMax = std::min(tMax, std::max(t1, t2));
+            // Finden des Schnittpunkts mit dem Fensterrand
+            float tMax = std::numeric_limits<float>::max();
+            if (dx != 0) {
+                float t1 = (0 - mousePosition.x) / dx;
+                float t2 = (window.getSize().x - mousePosition.x) / dx;
+                tMax = std::min(tMax, std::max(t1, t2));
+            }
+            if (dy != 0) {
+                float t1 = (0 - mousePosition.y) / dy;
+                float t2 = (window.getSize().y - mousePosition.y) / dy;
+                tMax = std::min(tMax, std::max(t1, t2));
+            }
+
+            sf::Vector2f endPoint(mousePosition.x + tMax * dx, mousePosition.y + tMax * dy);
+            sf::Vertex line[] =
+            {
+                sf::Vertex(sf::Vector2f(static_cast<float>(mousePosition.x), static_cast<float>(mousePosition.y)), sf::Color::Red),
+                sf::Vertex(endPoint, sf::Color::Red)
+            };
+
+            window.draw(line, 2, sf::Lines);
         }
-        if (dy != 0) {
-            float t1 = (0 - mousePosition.y) / dy;
-            float t2 = (window.getSize().y - mousePosition.y) / dy;
-            tMax = std::min(tMax, std::max(t1, t2));
-        }
-
-        sf::Vector2f endPoint(mousePosition.x + tMax * dx, mousePosition.y + tMax * dy);
-        sf::Vertex line[] =
-        {
-            sf::Vertex(sf::Vector2f(static_cast<float>(mousePosition.x), static_cast<float>(mousePosition.y)), sf::Color::Red),
-            sf::Vertex(endPoint, sf::Color::Red)
-        };
-
-        window.draw(line, 2, sf::Lines);
     }
 }
 

@@ -22,6 +22,20 @@ void Draw::drawRectangle()
     // Setze die Position des Rechtecks
     rectangle.setPosition(600.f, 200.f);
 }
+
+void Draw::drawTriangle()
+{
+    // Erstelle ein Dreieck
+    triangle.setPointCount(3);
+    triangle.setPoint(0, sf::Vector2f(0.f, 0.f));
+    triangle.setPoint(1, sf::Vector2f(150.f, 0.f));
+    triangle.setPoint(2, sf::Vector2f(75.f, 150.f));
+    triangle.setFillColor(sf::Color::Yellow);
+    triangle.setOutlineThickness(5.f);
+    triangle.setOutlineColor(sf::Color::Blue);
+    // Setze die Position des Dreiecks
+    triangle.setPosition(400.f, 400.f);
+}
 /*
 void Draw::drawText()
 {

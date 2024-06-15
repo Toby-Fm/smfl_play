@@ -38,6 +38,7 @@ private:
     void drawCircle(); // Zeichnet den Kreis
     void drawRectangles(); // Zeichnet die Rechtecke
     void drawMousePointer();
+    void drawTriangle(); // Zeichnet das Dreieck
 
     void ProcessEvents();
     void update(); // Aktualisiert das Fenster

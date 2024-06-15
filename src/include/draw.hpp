@@ -10,6 +10,9 @@ public:
 
     void drawRectangle();
     sf::RectangleShape& getRectangle() { return rectangle; }
+
+    void drawTriangle();
+    sf::ConvexShape& getTriangle() { return triangle; }
     /*
     void drawText();
     sf::Text& getText() { return text; } // Ändere die Rückgabe zu einem Referenztyp
@@ -21,4 +24,5 @@ private:
     sf::RectangleShape rectangle;
     sf::Font font;
     sf::Text text;
+    sf::ConvexShape triangle;
 };
