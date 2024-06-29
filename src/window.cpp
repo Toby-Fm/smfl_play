@@ -216,41 +216,44 @@ void Window::renderFPS() {
 
 // Handle player input
 void Window::handlePlayerInput(sf::Keyboard::Key key, bool isPressed) {
-    if (key == sf::Keyboard::W) {
-        movingUpCricle = isPressed;
-
-        //std::cout << "W" << std::endl;
-    };
-    if (key == sf::Keyboard::S) {
-        movingDownCricle = isPressed;
-        //std::cout << "S" << std::endl;
-    };
-    if (key == sf::Keyboard::A) {
-        movingLeftCricle = isPressed;
-        //std::cout << "A" << std::endl;
-    };
-    if (key == sf::Keyboard::D) {
-        movingRightCricle = isPressed;
-        //std::cout << "D" << std::endl;
-    };
-    if (key == sf::Keyboard::Up) {
-        movingUpRec = isPressed;
-        //std::cout << "Up" << std::endl;
-    };
-    if (key == sf::Keyboard::Down) {
-        movingDownRec = isPressed;
-        //std::cout << "Down" << std::endl;
-    };
-    if (key == sf::Keyboard::Left) {
-        movingLeftRec = isPressed;
-        //std::cout << "Left" << std::endl;
-    };
-    if (key == sf::Keyboard::Right) {
-        movingRightRec = isPressed;
-        //std::cout << "Right" << std::endl;
-    };
-    if (key == sf::Keyboard::Escape) {
-        destroy();
+    switch (key) {
+        case sf::Keyboard::W: {
+            std::cout << "W" << std::endl;
+            movingUpCricle = isPressed;
+            break;
+        }
+        case sf::Keyboard::S: {
+            movingDownCricle = isPressed;
+            break;
+        }
+        case sf::Keyboard::A: {
+            movingLeftCricle = isPressed;
+            break;
+        }
+        case sf::Keyboard::D: {
+            movingRightCricle = isPressed;
+            break;
+        }
+        case sf::Keyboard::Up: {
+            movingUpRec = isPressed;
+            break;
+        }
+        case sf::Keyboard::Down: {
+            movingDownRec = isPressed;
+            break;
+        }
+        case sf::Keyboard::Left: {
+            movingLeftRec = isPressed;
+            break;
+        }
+        case sf::Keyboard::Right: {
+            movingRightRec = isPressed;
+            break;
+        }
+        case sf::Keyboard::Escape: {
+            destroy();
+            break;
+        }
     }
 }
 
